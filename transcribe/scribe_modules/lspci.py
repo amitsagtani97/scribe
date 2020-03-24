@@ -12,20 +12,21 @@ class Lspci(ScribeModuleBaseClass):
                                        host_name=host_name,
                                        input_type=input_type,
                                        scribe_uuid=scribe_uuid)
-        if input_dict:
-            self.value = self._parse(input_dict)
 
     def __iter__(self):
         for attr, value in self.__dict__.items():
             yield attr, value
 
-    def _parse(self, lspci_data):
-        output = []
-        lspci_lines = lspci_data.get("stockpile_lspci").split('\n\n')
+    def parse(self):
+        lspci_data = self._input_dict
+        lspci_lines = lspci_data.split('\n\n')
+
         if len(lspci_lines) <= 1:
-            print("Error occured in processing sysctl data")
+            print("No data is available to process.")
             sys.exit(1)
 
+        # lspci_lines contains a list of slots and its information.
+        # We are yielding a dict of these individual slots.
         for i in range(len(lspci_lines)):
             slot_data = lspci_lines[i].split('\n')
             # sample - ['Slot:\t00:00.0', 'Class:\tHost bridge', 'Vendor:\tIntel Corporation' ..... ]
@@ -34,6 +35,4 @@ class Lspci(ScribeModuleBaseClass):
                 key = slot_info.split(':\t')[0].strip()
                 value = slot_info.split(':\t')[1].strip()
                 slot_dict[key] = value
-            output.append(slot_dict)
-
-        return output
+            yield slot_dict
