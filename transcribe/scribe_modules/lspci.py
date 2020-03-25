@@ -30,9 +30,9 @@ class Lspci(ScribeModuleBaseClass):
         for i in range(len(lspci_lines)):
             slot_data = lspci_lines[i].split('\n')
             # sample - ['Slot:\t00:00.0', 'Class:\tHost bridge', 'Vendor:\tIntel Corporation' ..... ]
-            slot_dict = {}
+            self._dict["value"] = {}
             for slot_info in slot_data:
                 key = slot_info.split(':\t')[0].strip()
                 value = slot_info.split(':\t')[1].strip()
-                slot_dict[key] = value
-            yield slot_dict
+                self._dict["value"][key] = value
+            yield self._dict["value"]

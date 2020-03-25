@@ -1,16 +1,30 @@
-scribe_uuid:
+Class:
   type: string
-  required: True
-host:
+  required: False
+Driver:
   type: string
-  required: True
-module:
+  required: False
+Module:
   type: string
-  required: True
-source_type:
+  required: False
+Device:
   type: string
-  allowed: ['stockpile']
-  required: True
-value:
-  type: dict
+  required: False
+Rev:
+  type: string
+  required: False
+Slot:
+  type: string
+  required: False
+SDevice:
+  type: string
+  required: False
+SVendor:
+  type: string
+  required: False
+Vendor:
+  type: string
+  required: False
+ProgIf:
+  type: string
   required: False
