@@ -2,6 +2,8 @@ from . import ScribeModuleBaseClass
 
 import sys
 
+from .lib.util import validate_length
+
 
 class Lspci(ScribeModuleBaseClass):
 
@@ -13,17 +15,11 @@ class Lspci(ScribeModuleBaseClass):
                                        input_type=input_type,
                                        scribe_uuid=scribe_uuid)
 
-    def __iter__(self):
-        for attr, value in self.__dict__.items():
-            yield attr, value
-
     def parse(self):
         lspci_data = self._input_dict
         lspci_lines = lspci_data.split('\n\n')
 
-        if len(lspci_lines) <= 1:
-            print("No data is available to process.")
-            sys.exit(1)
+        validate_length(len(lspci_lines), self.module)
 
         # lspci_lines contains a list of slots and its information.
         # We are yielding a dict of these individual slots.
@@ -35,4 +31,4 @@ class Lspci(ScribeModuleBaseClass):
                 key = slot_info.split(':\t')[0].strip()
                 value = slot_info.split(':\t')[1].strip()
                 self._dict["value"][key] = value
-            yield self._dict["value"]
+            yield self._dict
